@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Page with Glassmorphism Navbar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Old+Standard+TT&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Old Standard TT', serif;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+        }
+        .navbar h1 {
+            font-family: 'Old Standard TT', serif;
+            color: black;
+            font-weight: 400;
+            margin: 0;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .navbar button {
+            font-family: 'Old Standard TT', serif;
+            background-color: transparent;
+            color: black;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 2.5px 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin-left: 10px;
+        }
+        .navbar button:hover {
+            background-color: black;
+            color: white;
+        }
+        .home-section, .portfolio-section, .about-section {
+            display: none;
+            padding: 80px 20px;
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+        }
+        .home-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .hook-text {
+            font-size: 2.5rem;
+            text-align: center;
+            animation: blurAnimation 10s infinite;
+            text-shadow: 0 0 0px rgba(0, 0, 0, 0);
+        }
+        @keyframes blurAnimation {
+            0% {
+                filter: blur(100px);
+            }
+            50% {
+                filter: blur(0px);
+            }
+            80% {
+                filter: blur(0px);
+            }
+            100% {
+                filter: blur(100px);
+            }
+        }
+        .portfolio-section, .about-section {
+            background-color: white;
+            padding: 45px;
+        }
+        .portfolio-item {
+            margin-bottom: 20px;
+        }
+        .portfolio-item h2 {
+            margin: 0;
+        }
+        .portfolio-item p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .separator {
+            border-top: 1px solid black;
+            margin: 10px 0;
+        }
+
+        /* About section styles */
+        .about-section h2 {
+            font-size: 2rem;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .about-section p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .about-section .whatsapp-button {
+            display: inline-block;
+            background-color: black;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        .about-section .whatsapp-button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1 id="homeButton">Imran Shaik</h1>
+        <div>
+            <button id="aboutButton">About</button>
+            <button id="portfolioButton">Portfolio</button>
+        </div>
+    </div>
+    
+    <div class="home-section" id="homeSection">
+        <div class="hook-text">
+            "I write to convert, otherwise I don't write."
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section" id="aboutSection">
+        <h2>Hi, I'm a conversion copywriter, designer who designs beautiful websites and crafts memorable logos.</h2>
+        <p>You know, most brands want to stand out from the crowd, but they can't? Well, what I do is, I write magical words that inspire audience action and design brand identities that stand out from the crowd and create a strong brand perception. In fact, I designed this website and its contents personally, which has created a smooth experience for the visitor.</p>
+        <p>Let's make your brand stand out from the crowd.</p>
+        <a href="#" id="whatsappLink" class="whatsapp-button">+919014651031</a>
+    </div>
+
+    <div class="portfolio-section" id="portfolioSection"></div>
+
+    <script>
+        // Show the home section by default
+        document.getElementById('homeSection').style.display = 'flex';
+
+        // Load portfolio items from JSON
+        function loadPortfolioItems() {
+            fetch('copyportfolioitems.json')
+                .then(response => response.json())
+                .then(data => {
+                    const portfolioSection = document.getElementById('portfolioSection');
+                    data.forEach(item => {
+                        const portfolioItem = document.createElement('div');
+                        portfolioItem.classList.add('portfolio-item');
+                        portfolioItem.innerHTML = `
+                            <p>${item.id.toString().padStart(2, '0')}</p>
+                            <h2>${item.title}</h2>
+                            <p><strong>Brand:</strong> ${item.brand}</p>
+                            <p><strong>Challenge:</strong> ${item.challenge}</p>
+                            <p><strong>Process:</strong> ${item.process}</p>
+                            <p><strong>Result:</strong> ${item.result}</p>
+                            <div class="separator"></div>
+                        `;
+                        portfolioSection.appendChild(portfolioItem);
+                    });
+                })
+                .catch(error => console.error('Error loading portfolio items:', error));
+        }
+
+        // Navigate to About section
+        document.getElementById('aboutButton').addEventListener('click', function() {
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('portfolioSection').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'block';
+        });
+
+        // WhatsApp link functionality
+        document.getElementById('whatsappLink').addEventListener('click', function() {
+            const phoneNumber = '+919014651031';
+            const message = 'Hi Imran Shaik, your work is awesome! Let\'s connect.';
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Navigate to Portfolio section
+        document.getElementById('portfolioButton').addEventListener('click', function() {
+            document.getElementById('homeSection').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'none';
+            document.getElementById('portfolioSection').style.display = 'block';
+            loadPortfolioItems(); // Load portfolio items when this section is shown
+        });
+
+        // Navigate to Home section
+        document.getElementById('homeButton').addEventListener('click', function() {
+            document.getElementById('portfolioSection').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'none';
+            document.getElementById('homeSection').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
